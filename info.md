@@ -27,9 +27,9 @@ To enable this platform, add the following lines to your configuration.yaml:
 ```yaml
 # Example configuration.yaml entry
 fan:
-  - platform: rpi_gpio_pwm
+  - platform: rpi_fan_gpio_pwm
     fans:
-      - name: Lightstrip Cupboard
+      - name: RPI Cooling Fan
         pin: 17
 ```
 
