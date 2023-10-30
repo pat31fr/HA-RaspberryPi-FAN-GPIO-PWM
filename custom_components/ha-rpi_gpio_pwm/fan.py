@@ -114,7 +114,9 @@ class PwmSimpleFan(FanEntity, RestoreEntity):
 
     def turn_on(self, percentage: Optional[int] = None, preset_mode: Optional[str] = None, **kwargs: Any) -> None:
         """Turn on the fan."""
-        if ATTR_PERCENTAGE in kwargs:
+        if percentage != None:
+            self._percentage = percentage
+        elif ATTR_PERCENTAGE in kwargs:
             self._percentage = kwargs[ATTR_PERCENTAGE]
         self._fan.value = self._percentage / 100
         self._is_on = True
