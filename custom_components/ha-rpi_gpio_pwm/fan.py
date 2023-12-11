@@ -14,7 +14,7 @@ from homeassistant.components.fan import (
     SUPPORT_SET_SPEED,
     FanEntity,
 )
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_NAME, STATE_ON
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_NAME, STATE_ON, CONF_UNIQUE_ID
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -43,7 +43,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
                     vol.Required(CONF_PIN): cv.positive_int,
                     vol.Optional(CONF_HOST, default=DEFAULT_HOST): cv.string,
                     vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
-                }
+                    vol.Optional(CONF_UNIQUE_ID): cv.string
+               }
             ],
         )
     }
@@ -62,7 +63,7 @@ def setup_platform(
         pin = fan_conf[CONF_PIN]
         opt_args = {}
         opt_args["pin_factory"] = PiGPIOFactory(host=fan_conf[CONF_HOST], port= fan_conf[CONF_PORT])
-        fan = PwmSimpleFan(PWMOutputDevice(pin, **opt_args), fan_conf[CONF_NAME])
+        fan = PwmSimpleFan(PWMOutputDevice(pin, **opt_args), fan_conf[CONF_NAME],led_conf.get(CONF_UNIQUE_ID))
         fans.append(fan)
 
     add_entities(fans)
@@ -71,12 +72,13 @@ def setup_platform(
 class PwmSimpleFan(FanEntity, RestoreEntity):
     """Representation of a simple PWM FAN."""
 
-    def __init__(self, fan, name):
+    def __init__(self, fan, name, unique_id=None):
         """Initialize PWM FAN."""
         self._fan = fan
         self._name = name
         self._is_on = False
         self._percentage = DEFAULT_PERCENTAGE
+        self._attr_unique_id = unique_id
 
     async def async_added_to_hass(self):
         """Handle entity about to be added to hass event."""
