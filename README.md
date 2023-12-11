@@ -41,6 +41,8 @@ fan:
 
 - **pin** integer *(REQUIRED)*: The pin connected to the FAN as a list.
 
+- **unique_id** string *(optional)*: The unique ID for this fan.
+
 - **host** string *(optional, default: localhost)*: The remote host address for the GPIO driver.
 
 - **port** integer *(optional, default: 8888)*: The port on which the GPIO driver is listening.
