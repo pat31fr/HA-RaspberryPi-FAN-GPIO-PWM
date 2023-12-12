@@ -63,7 +63,7 @@ def setup_platform(
         pin = fan_conf[CONF_PIN]
         opt_args = {}
         opt_args["pin_factory"] = PiGPIOFactory(host=fan_conf[CONF_HOST], port= fan_conf[CONF_PORT])
-        fan = PwmSimpleFan(PWMOutputDevice(pin, **opt_args), fan_conf[CONF_NAME],led_conf.get(CONF_UNIQUE_ID))
+        fan = PwmSimpleFan(PWMOutputDevice(pin, **opt_args), fan_conf[CONF_NAME],fan_conf.get(CONF_UNIQUE_ID))
         fans.append(fan)
 
     add_entities(fans)
